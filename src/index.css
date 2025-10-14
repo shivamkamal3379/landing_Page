@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  /* Adjust animation duration to make it faster (e.g., from 25s to 15s) */
+  animation: scroll 15s linear infinite;
+}
+
+/* New utility class to pause animation on hover */
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Adjust the hover effect for the individual car cards */
+.car-card-hover:hover {
+  /* Increase the translate value to lift the card more */
+  transform: translateY(-1rem);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
