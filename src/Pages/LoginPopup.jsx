@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+ import Footer from '../Pages/Footer'
 
 export default function LoginPopup({ onClose }) {
   const [username, setUsername] = useState("");
@@ -80,7 +81,7 @@ export default function LoginPopup({ onClose }) {
             </a>
           </div>
 
-          <button
+          <button 
             type="submit"
             className="w-full p-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold"
           >
@@ -104,6 +105,7 @@ export default function LoginPopup({ onClose }) {
           &times;
         </button>
       </div>
+      
     </div>
   );
 }

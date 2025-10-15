@@ -3,6 +3,7 @@ import LoginPopup from  '../Pages/LoginPopup';
 import Gallery from '../Pages/Gallery';
 import NewsLetter from '../Pages/NewsLetter'
 import AboutUs from '../Pages/AboutUs'
+import Footer from '../Pages/Footer'
 
 const cars = [
   {
@@ -140,8 +141,10 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
 
+      </section>
+      
+     
       {showLogin && <LoginPopup onClose={handleCloseLogin} />}
       {showGallery && <Gallery onClose={handleCloseGallery} />}
       {showNewsLetter && <NewsLetter onClose={handleCloseNewsLetter} />}
