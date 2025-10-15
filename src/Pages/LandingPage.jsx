@@ -88,7 +88,7 @@ export default function LandingPage() {
           <button onClick={handleLoginClick} className="hover:text-blue-400">
             Login
           </button>
-          {/* <button onClick={handleGalleryClick} className="hover:text-blue-400">
+           <button onClick={handleGalleryClick} className="hover:text-blue-400">
             Gallery
           </button>
           <button onClick={handleNewsLetterClick} className="hover:text-blue-400">
@@ -96,7 +96,7 @@ export default function LandingPage() {
           </button>
           <button onClick={handleAboutUsClick} className="hover:text-blue-400">
             About Us
-          </button> */}
+          </button> 
         </div>
       </nav>
 
@@ -143,9 +143,9 @@ export default function LandingPage() {
       </section>
 
       {showLogin && <LoginPopup onClose={handleCloseLogin} />}
-      {/* {showGallery && <Gallery onClose={handleCloseGallery} />}
+      {showGallery && <Gallery onClose={handleCloseGallery} />}
       {showNewsLetter && <NewsLetter onClose={handleCloseNewsLetter} />}
-      {showAboutUs && <AboutUs onClose={handleCloseAboutUs} />} */}
+      {showAboutUs && <AboutUs onClose={handleCloseAboutUs} />} 
     </div>
   );
 }
