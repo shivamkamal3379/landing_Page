@@ -77,7 +77,7 @@ export default function AboutUs({ onClose }) {
           <X className="w-6 h-6" />
         </button>
 
-        <div className="relative h-[450px] overflow-hidden">
+        <div className="relative h-[70vh] overflow-hidden">
           <img
             src="https://www.shutterstock.com/image-illustration/futuristic-car-driving-tunnel-abstract-600nw-2321057487.jpg"
             alt="Modern sports car driving on a scenic highway at dusk."
