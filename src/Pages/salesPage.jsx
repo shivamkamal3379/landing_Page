@@ -39,7 +39,6 @@ const BellIcon = () => (
     </svg>
 );
 
-// --- Component for the Key Metric Cards  ---
 
 const MetricCard = ({ icon, title, isDarkMode }) => {
     // Dynamic styling based on dark mode state
@@ -55,14 +54,12 @@ const MetricCard = ({ icon, title, isDarkMode }) => {
                 {icon}
             </div>
             <div>
-                {/* Title is now the main text, with bold styling */}
                 <p className={`text-base font-bold ${titleClasses}`}>{title}</p>
             </div>
         </div>
     );
 };
 
-// --- Component for the Main Navigation Header ---
 
 const NavItem = ({ name, isDarkMode }) => {
     const textClasses = isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900";
