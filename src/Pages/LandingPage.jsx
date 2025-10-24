@@ -44,8 +44,7 @@ export default function LandingPage() {
   const [showNewsLetter, setShowNewsLetter] = useState(false);
   const [showAboutUs, setShowAboutUs] = useState(false);
 
-  // Login open/close
-  const handleLoginClick = () => {
+   const handleLoginClick = () => {
     setShowLogin(true);
   };
 
@@ -53,7 +52,7 @@ export default function LandingPage() {
     setShowLogin(false);
   };
 
-  // Gallery open/close
+  // Gallery o
   const handleGalleryClick = () => {
     setShowGallery(true);
   };
@@ -61,7 +60,7 @@ export default function LandingPage() {
     setShowGallery(false);
   };
   
-  // Newsletter open/close
+  // Newsletter 
   const handleNewsLetterClick = () => {
     setShowNewsLetter(true);
   };
@@ -69,7 +68,7 @@ export default function LandingPage() {
     setShowNewsLetter(false);
   };
 
-  // About us open/close
+  // About us
   const handleAboutUsClick = () => {
     setShowAboutUs(true);
   };
@@ -79,8 +78,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans">
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-[#0b1320] bg-opacity-90 backdrop-blur-sm">
+       <nav className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-[#0b1320] bg-opacity-90 backdrop-blur-sm">
         <div className="text-xl font-bold flex items-center gap-2">
           <div className="bg-blue-600 w-3 h-3 rotate-45"></div>
           AutoCorp
@@ -101,8 +99,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero Section - now with `min-h-screen` for a full-screen effect */}
-      <section className="relative flex flex-col items-center justify-center text-center px-6 min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 overflow-hidden">
+       <section className="relative flex flex-col items-center justify-center text-center px-6 min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 overflow-hidden">
         <img
           src="https://mgmotor.scene7.com/is/image/mgmotor/windsor-bn-dsc-011?hei=1920&qlt=90&resMode=bisharp"
           alt="Car background"
@@ -119,8 +116,7 @@ export default function LandingPage() {
           </div>
       </section>
 
-      {/* Animated Horizontal Car Cards */}
-      <section className="bg-[#0f172a] py-12 overflow-hidden">
+       <section className="bg-[#0f172a] py-12 overflow-hidden">
         <div className="relative w-full">
           <div className="flex gap-6 animate-scroll hover:[animation-play-state:paused]">
             {[...cars, ...cars].map((car, index) => (

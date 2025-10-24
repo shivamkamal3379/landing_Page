@@ -1,220 +1,391 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+
+const formatIndianCurrency = (num) => {
+    if (num >= 10000000) { 
+        return `₹${(num / 10000000).toLocaleString('en-IN', { maximumFractionDigits: 2 })} Cr`;
+    }
+    if (num >= 100000) { 
+        return `₹${(num / 100000).toLocaleString('en-IN', { maximumFractionDigits: 2 })} L`;
+    }
+    return `₹${num.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+};
+
+const monthlySalesData = [
+    { month: 'Jan', Revenue: 10, pv: 1000000 },
+    { month: 'Feb', Revenue: 15, pv: 1500000 },
+    { month: 'Mar', Revenue: 12, pv: 1200000 },
+    { month: 'Apr', Revenue: 18, pv: 1800000 },
+    { month: 'May', Revenue: 16, pv: 1600000 },
+    { month: 'Jun', Revenue: 21, pv: 2100000 },
+    { month: 'Jul', Revenue: 23, pv: 2300000 },
+    { month: 'Aug', Revenue: 27, pv: 2700000 },
+    { month: 'Sep', Revenue: 25, pv: 2500000 },
+    { month: 'Oct', Revenue: 30, pv: 3000000 },
+    { month: 'Nov', Revenue: 32, pv: 3200000 },
+    { month: 'Dec', Revenue: 38, pv: 3800000 },
+];
+
+const performanceSummaryData = [
+    { rep: 'Ramesh K.', deals: 45, revenue: 1550000, target: 1800000, status: '90%' },
+    { rep: 'Priya S.', deals: 32, revenue: 1220000, target: 1200000, status: '102%' },
+    { rep: 'Amit M.', deals: 50, revenue: 950000, target: 1000000, status: '95%' },
+    { rep: 'Deepa V.', deals: 28, revenue: 780000, target: 900000, status: '87%' },
+];
+
+const NAV_OPTIONS = {
+    Dashboard: ['Sales Metrics', 'Performance Summary', 'Activity Feed'],
+    'Payment Management': [
+        'Invoices & Bills',
+        'Transaction History',
+        'Payment Gateways',
+        'Subscription Management',
+        'Refunds & Credits',
+    ],
+    Settings: ['User & Security', 'System Configuration', 'Data Import/Export', 'Integrations'],
+};
+
+const Icon = ({ children }) => <span className="mr-2 text-xl">{children}</span>;
+
+const sidebarVariants = {
+    hidden: { x: '-100%' },
+    visible: { 
+        x: 0, 
+        transition: { type: "spring", stiffness: 100, damping: 20 } 
+    },
+};
+
+const KPICards = ({ isDarkMode }) => {
+    const revenueValue = 5423400;
+    const cardBg = isDarkMode ? 'bg-gray-700/80 shadow-lg' : 'bg-white shadow-md';
+    const textBase = isDarkMode ? 'text-gray-100' : 'text-gray-900';
+
+    const kpiData = [
+        { title: "Total Revenue", value: formatIndianCurrency(revenueValue), change: "+12%", changeColor: 'text-emerald-400', themeColor: 'border-indigo-500', bg: isDarkMode ? 'bg-gray-800' : 'bg-indigo-50' },
+        { title: "New Leads", value: "1,230", change: "+5%", changeColor: 'text-emerald-400', themeColor: 'border-green-500', bg: isDarkMode ? 'bg-gray-800' : 'bg-green-50' },
+        { title: "Deals Closed", value: "312", change: "-2%", changeColor: 'text-red-400', themeColor: 'border-red-500', bg: isDarkMode ? 'bg-gray-800' : 'bg-red-50' },
+        { title: "Conversion Rate", value: "25.3%", change: "+15%", changeColor: 'text-emerald-400', themeColor: 'border-purple-500', bg: isDarkMode ? 'bg-gray-800' : 'bg-purple-50' },
+    ];
+    
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {kpiData.map((kpi, index) => (
+                <motion.div
+                    key={kpi.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.03, zIndex: 5, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2)' }}
+                    className={`${kpi.bg} p-4 sm:p-6 rounded-xl border-l-4 ${kpi.themeColor} ${cardBg} transition-all duration-300`}
+                >
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} font-medium`}>{kpi.title}</p>
+                    <p className={`text-2xl sm:text-3xl font-bold ${textBase} mt-1`}>{kpi.value}</p>
+                    <p className={`text-xs ${kpi.changeColor} mt-2`}>{kpi.change} from last month</p>
+                </motion.div>
+            ))}
+        </div>
+    );
+};
+
+const SalesTrendChart = ({ isDarkMode }) => {
+    const chartBg = isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200';
+    const chartText = isDarkMode ? '#e5e7eb' : '#374151';
+    const gridStroke = isDarkMode ? '#4b5563' : '#e0e0e0';
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className={`mt-8 p-4 sm:p-6 rounded-xl border shadow-md ${chartBg}`}
+        >
+            <h3 className={`text-lg sm:text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Sales Performance Trend (Revenue in Lakhs)</h3>
+            
+            <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={monthlySalesData} margin={{ top: 5, right: 10, left: -15, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
+                    <XAxis dataKey="month" axisLine={false} tickLine={false} stroke={chartText} />
+                    <YAxis 
+                        tickFormatter={(value) => `${value}L`}
+                        axisLine={false} 
+                        tickLine={false}
+                        stroke={chartText}
+                        domain={[0, 40]}
+                    />
+                    <Tooltip 
+                        contentStyle={{ borderRadius: '8px', border: '1px solid #ccc', backgroundColor: isDarkMode ? '#1f2937' : '#fff', color: isDarkMode ? '#f9fafb' : '#1f2937', fontSize: '12px' }}
+                        formatter={(value) => [formatIndianCurrency(value * 100000), 'Revenue']} 
+                    />
+                    <Line type="monotone" dataKey="Revenue" stroke="#6366f1" strokeWidth={3} animationDuration={1500} dot={false} activeDot={{ r: 8, stroke: '#6366f1', strokeWidth: 4 }} />
+                </LineChart>
+            </ResponsiveContainer>
+        </motion.div>
+    );
+};
+
+const PerformanceTable = ({ isDarkMode }) => {
+    const tableBg = isDarkMode ? 'bg-gray-800' : 'bg-white';
+    const headerBg = isDarkMode ? 'bg-gray-700' : 'bg-indigo-50';
+    const headerText = isDarkMode ? 'text-indigo-400' : 'text-indigo-700';
+    const bodyText = isDarkMode ? 'text-gray-300' : 'text-gray-500';
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mt-4 overflow-x-auto"
+        >
+            <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Sales Rep Performance</h3>
+            <table className={`min-w-full ${tableBg} shadow-md rounded-lg overflow-hidden`}>
+                <thead className={`${headerBg} border-b ${isDarkMode ? 'border-gray-700' : 'border-indigo-200'}`}>
+                    <tr>
+                        {['Sales Rep', 'Deals Closed', 'Revenue', 'Target', 'Achieved'].map((header) => (
+                            <th key={header} className={`py-3 px-4 sm:px-6 text-left text-xs font-medium uppercase tracking-wider ${headerText}`}>
+                                {header}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody className={`divide-y ${isDarkMode ? 'divide-gray-700' : 'divide-gray-200'}`}>
+                    {performanceSummaryData.map((row) => (
+                        <tr key={row.rep} className={isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
+                            <td className={`py-3 px-4 sm:px-6 whitespace-nowrap text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{row.rep}</td>
+                            <td className={`py-3 px-4 sm:px-6 whitespace-nowrap text-sm ${bodyText}`}>{row.deals}</td>
+                            <td className={`py-3 px-4 sm:px-6 whitespace-nowrap text-sm ${bodyText}`}>{formatIndianCurrency(row.revenue)}</td>
+                            <td className={`py-3 px-4 sm:px-6 whitespace-nowrap text-sm ${bodyText}`}>{formatIndianCurrency(row.target)}</td>
+                            <td className="py-3 px-4 sm:px-6 whitespace-nowrap text-sm font-semibold" style={{ color: row.status.includes('100') ? '#10B981' : '#F59E0B' }}>
+                                {row.status}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </motion.div>
+    );
+};
 
  
-const TruckIcon = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M5 18H3c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2h4l3-3h6l3 3h4c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2h-2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>
-    <path d="M19 18H9V6h6"/><path d="M11 6V3"/>
-  </svg>
-);
+function SalesPage() {
+    const [isDarkMode, setIsDarkMode] = useState(true); 
+    const [activeMenu, setActiveMenu] = useState('Dashboard');
+    const [activeSubMenu, setActiveSubMenu] = useState('Sales Metrics'); 
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-const UsersIcon = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-  </svg>
-);
+    const toggleDarkMode = () => setIsDarkMode(prevMode => !prevMode);
 
-const FileTextIcon = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 12h4"/><path d="M10 16h4"/><path d="M10 20h4"/>
-  </svg>
-);
+    const sidebarOptions = useMemo(() => NAV_OPTIONS[activeMenu] || [], [activeMenu]);
+    const hasSidebar = activeMenu !== 'Administrator';
 
-const DollarSignIcon = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-  </svg>
-);
-
-const SettingIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 0-2 0l-.15-.08a2 2 0 0 0-2.73 1.04l-.19.33a2 2 0 0 0 .58 2.22l.11.12a2 2 0 0 1-.39 1.9L3 14v.24a2 2 0 0 0 .97 1.77l.42.25a2 2 0 0 1 1.73 1l.15.34a2 2 0 0 0 2.2 1.43h.2a2 2 0 0 0 2-1.07l.34-.65a2 2 0 0 1 1.73-1l.62-.27a2 2 0 0 0 1.25-1.55l.04-.42a2 2 0 0 0-.8-1.8l-.13-.1a2 2 0 0 1-.38-1.92l.14-.34a2 2 0 0 0-.2-2.22l-.3-.3a2 2 0 0 0-2.17-.58l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-        <circle cx="12" cy="12" r="3"/>
-    </svg>
-);
-
-const BellIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-    </svg>
-);
-
-
-const MetricCard = ({ icon, title, isDarkMode }) => {
-    // Dynamic styling based on dark mode state
-    const cardClasses = isDarkMode 
-        ? "bg-gray-800 hover:bg-gray-700/80 shadow-lg" 
-        : "bg-white hover:bg-gray-100/90 border border-gray-200 shadow-md";
+    const handleTopMenuClick = (key) => {
+        setActiveMenu(key);
+        if (NAV_OPTIONS[key] && NAV_OPTIONS[key].length > 0) {
+            setActiveSubMenu(NAV_OPTIONS[key][0]);
+        } else {
+            setActiveSubMenu('');
+        }
+        setIsUserDropdownOpen(key === 'Administrator');
+    };
     
-    const titleClasses = isDarkMode ? "text-white" : "text-gray-900";
-
-    return (
-        <div className={`flex items-center space-x-4 p-6 rounded-xl transition duration-300 ${cardClasses}`}>
-            <div className="p-3 rounded-full bg-blue-600 text-white flex-shrink-0">
-                {icon}
-            </div>
-            <div>
-                <p className={`text-base font-bold ${titleClasses}`}>{title}</p>
-            </div>
-        </div>
-    );
-};
-
-
-const NavItem = ({ name, isDarkMode }) => {
-    const textClasses = isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900";
-    const bgClasses = isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-200";
-    return (
-        <a href="#" className={`px-3 py-2 text-sm font-medium rounded-lg transition duration-150 ${textClasses} ${bgClasses}`}>
-            {name}
-        </a>
-    );
-};
-
-const UserAvatar = () => (
-    <div className="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-xs font-bold text-white cursor-pointer hover:ring-2 ring-pink-400">
-        S
-    </div>
-);
-
-// Updated: Now handles Dark Mode state and the new branding
-const Header = ({ isDarkMode, toggleDarkMode }) => {
-    const headerClasses = isDarkMode 
-        ? "bg-gray-900 border-b border-blue-600/50 shadow-xl"
-        : "bg-white border-b border-gray-300 shadow-md";
-    
-    const titleColor = isDarkMode ? "text-blue-400" : "text-blue-600";
-    const iconColor = isDarkMode ? "text-gray-300" : "text-gray-700";
-    const iconHoverBg = isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-200";
-
-    return (
-        <header className={`flex items-center justify-between p-4 fixed w-full z-10 top-0 transition-colors duration-500 ${headerClasses}`}>
-            {/* Left Section: Logo/Title - Updated to AutoCrop Sales */}
-            <div className="flex items-center space-x-6">
-                <h1 className={`text-xl font-extrabold tracking-wider ${titleColor}`}>
-                    AutoCrop Sales
-                </h1>
-            </div>
-
-            {/* Center Section: Navigation Links */}
-            <nav className="hidden lg:flex items-center space-x-1">
-                <NavItem name="Dashboard" isDarkMode={isDarkMode} />
-                <NavItem name="Administrator" isDarkMode={isDarkMode} />
-                <NavItem name="Payment Mgmt" isDarkMode={isDarkMode} />
-                <NavItem name="Setting" isDarkMode={isDarkMode} />
-            </nav>
-
-            {/* Right Section: Utility Icons (Toggle, Bell, Setting, Avatar) */}
-            <div className={`flex items-center space-x-4 ${iconColor}`}>
-                {/* Dark Mode Toggle Button */}
-                <button 
-                    onClick={toggleDarkMode}
-                    className={`p-2 rounded-full transition duration-150 ${iconHoverBg}`}
-                    aria-label="Toggle dark/light mode"
-                >
-                    {/* Dynamic Sun/Moon icon based on state */}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
-                        className={isDarkMode ? "text-yellow-300" : "text-blue-600"}>
-                        {isDarkMode ? (
-                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/> // Moon icon
-                        ) : (
-                            // Sun icon elements
-                            <>
-                                <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/> 
-                            </>
-                        )}
-                    </svg>
-                </button>
-                
-                {/* Other Icons remain the same */}
-                <button className={`p-2 rounded-full transition duration-150 ${iconHoverBg}`} aria-label="Notifications">
-                    <BellIcon />
-                </button>
-                <button className={`p-2 rounded-full transition duration-150 ${iconHoverBg}`} aria-label="Settings">
-                    <SettingIcon />
-                </button>
-                <UserAvatar />
-            </div>
-        </header>
-    );
-};
-
-// --- Main Sales Page Component ---
-
-export const SalesPage = () => {
-    // State for dark mode toggle, defaulting to dark (true) as in the image
-    const [isDarkMode, setIsDarkMode] = useState(true);
-    
-    const toggleDarkMode = () => {
-        setIsDarkMode(prevMode => !prevMode);
+     const handleSubMenuClick = (option) => {
+        setActiveSubMenu(option);
+        setIsMobileSidebarOpen(false); 
     };
 
-    // Conditional styling for the whole application container
-    const appClassName = isDarkMode 
-        ? "min-h-screen bg-gray-900 font-sans text-white flex flex-col transition-colors duration-500"
-        : "min-h-screen bg-gray-100 font-sans text-gray-900 flex flex-col transition-colors duration-500";
+    const renderMainContent = () => {
+        let contentTitle = activeSubMenu || `${activeMenu} Overview`;
+        const contentBg = isDarkMode ? 'bg-gray-800 shadow-xl' : 'bg-white shadow-lg';
+        const titleColor = isDarkMode ? 'text-white' : 'text-gray-800';
         
-    // Conditional text colors for the Dashboard section
-    const primaryText = isDarkMode ? "text-gray-100" : "text-gray-900";
-    const secondaryText = isDarkMode ? "text-gray-400" : "text-gray-500";
-    
-    // Updated metrics array without values
-    const metrics = [
-        { icon: <TruckIcon className="w-6 h-6" />, title: "Total Vehicles" },
-        { icon: <UsersIcon className="w-6 h-6" />, title: "Total Customers" },
-        { icon: <FileTextIcon className="w-6 h-6" />, title: "Invoices" },
-        { icon: <DollarSignIcon className="w-6 h-6" />, title: "Revenue" },
-    ];
+        return (
+            <div className={`p-4 sm:p-8 rounded-xl ${contentBg} min-h-[700px]`}>
+                <h2 className={`text-2xl sm:text-3xl font-extrabold mb-6 ${titleColor}`}>{contentTitle}</h2>
 
-    // Placeholder content area dynamic styling
-    const placeholderClasses = isDarkMode 
-        ? "bg-gray-800 border border-gray-700/50" 
-        : "bg-white border border-gray-300";
+                 {activeMenu === 'Dashboard' && activeSubMenu === 'Sales Metrics' && (
+                    <>
+                        <KPICards isDarkMode={isDarkMode} />
+                        <SalesTrendChart isDarkMode={isDarkMode} />
+                    </>
+                )}
+                
+                {activeMenu === 'Dashboard' && activeSubMenu === 'Performance Summary' && (
+                    <>
+                        <KPICards isDarkMode={isDarkMode} /> 
+                        <PerformanceTable isDarkMode={isDarkMode} />
+                    </>
+                )}
+                
+                {activeMenu === 'Payment Management' && activeSubMenu === 'Invoices & Bills' && (
+                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className={isDarkMode ? "text-gray-300 mt-4 p-4 border border-gray-700 rounded-lg" : "text-gray-600 mt-4"}>
+                        **Invoices & Bills:** Dedicated section for creating, viewing, and managing all outstanding and paid customer invoices.
+                    </motion.p>
+                )}
+                
+                {activeMenu === 'Payment Management' && activeSubMenu === 'Transaction History' && (
+                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className={isDarkMode ? "text-gray-300 mt-4 p-4 border border-gray-700 rounded-lg" : "text-gray-600 mt-4"}>
+                        **Transaction History:** Detailed chronological ledger of all money in (payments) and money out (refunds/payouts).
+                    </motion.p>
+                )}
+
+                 {(activeMenu === 'Settings' || activeSubMenu === 'Activity Feed' || (activeMenu === 'Payment Management' && !['Invoices & Bills', 'Transaction History'].includes(activeSubMenu))) && (
+                    <p className={isDarkMode ? "text-gray-400 mt-4" : "text-gray-600 mt-4"}>
+                        Content for **{activeSubMenu || activeMenu}** will be developed here.
+                    </p>
+                )}
+            </div>
+        );
+    };
+
+     const appBg = isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900';
+    const navbarBg = isDarkMode ? 'bg-gray-800' : 'bg-white';
+    const sidebarBg = isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200';
+    const logoColor = isDarkMode ? 'text-indigo-400' : 'text-indigo-700';
+    const menuIconColor = isDarkMode ? 'text-gray-300' : 'text-gray-700';
+
 
     return (
-        <div className={appClassName}>
-            
-            {/* 1. Header/Navigation Bar */}
-            <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+        <div className={`min-h-screen flex flex-col transition-colors duration-500 ${appBg}`}>
+             <nav className={`sticky top-0 flex justify-between items-center px-4 sm:px-6 py-4 shadow-md z-20 ${navbarBg}`}>
+                
+                <div className="flex items-center space-x-4">
+                     <button 
+                        onClick={() => setIsMobileSidebarOpen(true)}
+                        className={`p-2 rounded-full lg:hidden transition-colors ${menuIconColor} ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+                        aria-label="Open sidebar menu"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="18" y2="18"/>
+                        </svg>
+                    </button>
 
-            {/* 2. Main Content Area */}
-            <main className="flex-grow p-4 sm:p-8 pt-24 max-w-7xl mx-auto w-full"> 
-                {/* Dashboard Title Section */}
-                <section className="mb-8">
-                    <h2 className={`text-4xl font-bold mb-1 ${primaryText}`}>Dashboard</h2>
-                    <p className={secondaryText}>Welcome to your AutoCrop Sales dashboard.</p>
-                </section>
-
-                {/* Key Metrics Cards */}
-                <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {metrics.map((metric, index) => (
-                        <MetricCard 
-                            key={index} 
-                            icon={metric.icon} 
-                            title={metric.title} 
-                            isDarkMode={isDarkMode}
-                            // Note: Value is no longer passed or used in MetricCard
-                        />
-                    ))}
-                </section>
-
-                {/* Placeholder for future charts/tables */}
-                <section className="mt-8">
-                    <div className={`p-8 rounded-xl min-h-[500px] flex items-center justify-center ${placeholderClasses}`}>
-                        <p className={secondaryText}>
-                            Content goes here (Charts, Tables, Activity Feed, etc.)
-                        </p>
+                    <span className={`text-xl sm:text-2xl font-black ${logoColor}`}> Sales Pro </span>
+                </div>
+                
+                <div className="flex space-x-2 relative items-center">
+                     <div className="hidden lg:flex space-x-2">
+                        {Object.keys(NAV_OPTIONS).map((key) => (
+                             
+                            <motion.button
+                                key={key}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 
+                                    ${activeMenu === key 
+                                    ? 'bg-indigo-600 text-white shadow-md' 
+                                    : isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'
+                                    }`}
+                                onClick={() => handleTopMenuClick(key)}
+                            >
+                                {key}
+                            </motion.button>
+                        ))}
                     </div>
-                </section>
+                    
+                     <motion.button
+                        onClick={toggleDarkMode}
+                        whileHover={{ scale: 1.1 }}
+                        className={`p-2 rounded-full transition-colors duration-200 ${isDarkMode ? 'text-yellow-400 hover:bg-gray-700' : 'text-indigo-600 hover:bg-gray-100'}`}
+                    >
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            {isDarkMode ? (
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                            ) : (
+                                <><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></>
+                            )}
+                        </svg>
+                    </motion.button>
 
-            </main>
+                 </div>
+            </nav>
 
-            {/* 3. Footer */}
-            <footer className={`w-full py-4 text-center text-xs mt-auto ${isDarkMode ? "bg-gray-900 text-gray-500 border-t border-gray-800" : "bg-gray-100 text-gray-600 border-t border-gray-300"}`}>
-                AutoCrop Sales Copyright 2025
-            </footer>
+             <div className="flex flex-grow overflow-hidden relative">
+                
+                 {hasSidebar && sidebarOptions.length > 0 && (
+                    <motion.aside
+                        initial={false}
+                        animate="visible"
+                        variants={sidebarVariants}
+                        className={`hidden lg:block lg:w-64 border-r p-6 flex-shrink-0 ${sidebarBg}`}
+                    >
+                        <h3 className={`text-xl font-semibold mb-4 border-b pb-2 ${isDarkMode ? 'text-indigo-400 border-gray-700' : 'text-indigo-600 border-gray-200'}`}>{activeMenu} Menu</h3>
+                        <ul>
+                            {sidebarOptions.map((option, index) => (
+                                <motion.li
+                                    key={option}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                    whileHover={{ x: 5, backgroundColor: isDarkMode ? '#374151' : '#ede9fe' }} 
+                                    className={`py-2 px-3 rounded-md cursor-pointer transition-colors duration-150 
+                                        ${activeSubMenu === option 
+                                            ? 'bg-indigo-600 text-white font-semibold shadow-md' 
+                                            : isDarkMode ? 'text-gray-300 hover:text-indigo-300' : 'text-gray-700 hover:text-indigo-700'
+                                        }`}
+                                    onClick={() => handleSubMenuClick(option)}
+                                >
+                                    <Icon>•</Icon> {option}
+                                </motion.li>
+                            ))}
+                        </ul>
+                    </motion.aside>
+                )}
+
+                 <AnimatePresence>
+                    {isMobileSidebarOpen && hasSidebar && (
+                        <>
+                             <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 0.5 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setIsMobileSidebarOpen(false)}
+                                className="fixed inset-0 bg-black z-30 lg:hidden"
+                            />
+
+                             <motion.aside
+                                initial="hidden"
+                                animate="visible"
+                                exit="hidden"
+                                variants={sidebarVariants}
+                                className={`fixed top-0 left-0 h-full w-64 border-r p-6 flex-shrink-0 z-40 ${sidebarBg} lg:hidden`}
+                            >
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>{activeMenu} Menu</h3>
+                                    <button onClick={() => setIsMobileSidebarOpen(false)} className={`p-1 rounded-full ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                    </button>
+                                </div>
+                                
+                                <ul>
+                                    {sidebarOptions.map((option, index) => (
+                                        <motion.li
+                                            key={option}
+                                            whileHover={{ scale: 1.02 }} 
+                                            className={`py-2 px-3 rounded-md cursor-pointer transition-colors duration-150 
+                                                ${activeSubMenu === option 
+                                                    ? 'bg-indigo-600 text-white font-semibold shadow-md' 
+                                                    : isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
+                                                }`}
+                                            onClick={() => handleSubMenuClick(option)}
+                                        >
+                                            <Icon>•</Icon> {option}
+                                        </motion.li>
+                                    ))}
+                                </ul>
+                            </motion.aside>
+                        </>
+                    )}
+                </AnimatePresence>
+
+
+                 <main className="flex-grow p-4 sm:p-8 overflow-y-auto">
+                    {renderMainContent()}
+                </main>
+            </div>
         </div>
     );
-};
+}
 
 export default SalesPage;

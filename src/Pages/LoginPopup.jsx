@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPopup({ onClose }) {
   const [username, setUsername] = useState("");
   const [department, setDepartment] = useState("@sales"); // default @sales
+  const [password, setPassword] = useState("");
   const dropdownOptions = ["@hr", "@admin", "@sales"];
   const usernameRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
-    
     if (usernameRef.current) {
       usernameRef.current.focus();
     }
@@ -36,6 +38,30 @@ export default function LoginPopup({ onClose }) {
     return `${username}${department}`;
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const fullEmail = getFullEmail();
+    
+    // Check if the email contains @sales
+    if (fullEmail.includes("@sales")) {
+      // Navigate to SalesPage
+      navigate("/sales");
+      onClose(); // Close the popup
+    } else if (fullEmail.includes("@admin")) {
+      // Navigate to Admin page if needed
+      navigate("/admin");
+      onClose();
+    } else if (fullEmail.includes("@hr")) {
+      // Navigate to HR page if needed
+      navigate("/hr");
+      onClose();
+    } else {
+      // Default navigation or show error
+      alert("Please select a valid department");
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
       <div className="bg-[#1e293b] p-8 rounded-lg shadow-lg max-w-md w-full text-white relative">
@@ -44,7 +70,7 @@ export default function LoginPopup({ onClose }) {
           Log in to your Autocorp account.
         </p>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-400 mb-1">
               Department
@@ -73,6 +99,7 @@ export default function LoginPopup({ onClose }) {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               className="w-full p-3 rounded-md bg-[#2d3748] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -82,8 +109,11 @@ export default function LoginPopup({ onClose }) {
             </label>
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               className="w-full p-3 rounded-md bg-[#2d3748] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 

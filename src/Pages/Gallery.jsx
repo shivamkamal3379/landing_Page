@@ -21,8 +21,7 @@ const filterOptions = {
 };
 
 const VehicleCard = ({ vehicle }) => {
-  // ... (VehicleCard component remains unchanged)
-  const { name, type, imageUrl, sourceUrl } = vehicle;
+   const { name, type, imageUrl, sourceUrl } = vehicle;
 
   const handleClick = useCallback(() => {
     if (sourceUrl) {

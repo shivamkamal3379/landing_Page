@@ -24,15 +24,13 @@ const StarRating = ({ rating }) => {
   return <div className="flex text-lg">{stars}</div>;
 };
 
-// Reusable component for section headers
-const SectionHeader = ({ title }) => (
+ const SectionHeader = ({ title }) => (
   <h2 className="text-2xl md:text-3xl font-semibold mt-12 mb-6">
     {title}
   </h2>
 );
 
-// Reusable component for news and review cards
-const Card = ({ image, title, description, rating }) => (
+ const Card = ({ image, title, description, rating }) => (
   <div className="flex flex-col bg-gray-900 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02] cursor-pointer">
     <img src={image} alt={title} className="w-full h-48 object-cover" />
     <div className="p-4 flex flex-col flex-grow">
@@ -43,8 +41,7 @@ const Card = ({ image, title, description, rating }) => (
   </div>
 );
 
-// Main NewsLetter component
-const NewsLetter = ({ onClose }) => {
+ const NewsLetter = ({ onClose }) => {
   const latestNews = [
     { id: 1, img: IMAGE_URLS.news1, title: "New Model Announcement: The Future Is Here", description: "The MG ZS EV is a compact, fully electric SUV known for its practicality, modern technology, and safety features. Key features include an electric powertrain with a range of up to 461 km on a full charge, fast charging capabilities, and a connected infotainment system with a 10.1-inch touchscreen." },
 
@@ -64,8 +61,7 @@ const NewsLetter = ({ onClose }) => {
     <div className="fixed inset-0 z-50 bg-gray-950 bg-opacity-90 flex justify-center items-start pt-10 px-4 overflow-y-auto">
       <div className="relative w-full max-w-6xl bg-gray-900 rounded-lg shadow-2xl my-10 animate-fade-in-up text-white">
         
-        {/* Close Button */}
-        <button
+         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors text-2xl"
         >
@@ -100,8 +96,7 @@ const NewsLetter = ({ onClose }) => {
         </header>
 
         <main className="p-6 md:p-10">
-          {/* Latest from the Track Section */}
-          <section className="mb-12">
+           <section className="mb-12">
             <SectionHeader title="Latest from the Track" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {latestNews.map(item => (
@@ -112,8 +107,7 @@ const NewsLetter = ({ onClose }) => {
 
           <hr className="border-gray-700 my-8" />
 
-          {/* Expert Reviews Section */}
-          <section>
+           <section>
             <SectionHeader title="Expert Reviews" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {expertReviews.map(item => (
