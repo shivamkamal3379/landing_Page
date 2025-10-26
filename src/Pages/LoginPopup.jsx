@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function LoginPopup({ onClose }) {
   const [username, setUsername] = useState("");
-  const [department, setDepartment] = useState("@sales"); // default @sales
+  const [department, setDepartment] = useState("@sales");
   const [password, setPassword] = useState("");
   const dropdownOptions = ["@hr", "@admin", "@sales"];
   const usernameRef = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     if (usernameRef.current) {
       usernameRef.current.focus();
@@ -20,47 +18,15 @@ export default function LoginPopup({ onClose }) {
       if (e.key === "Escape") {
         onClose();
       }
-    };
+    }; 
 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
-
-  const handleDepartmentChange = (e) => {
-    setDepartment(e.target.value);
-  };
-
-  const getFullEmail = () => {
-    return `${username}${department}`;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    const fullEmail = getFullEmail();
-    
-    // Check if the email contains @sales
-    if (fullEmail.includes("@sales")) {
-      // Navigate to SalesPage
-      navigate("/sales");
-      onClose(); // Close the popup
-    } else if (fullEmail.includes("@admin")) {
-      // Navigate to Admin page if needed
-      navigate("/admin");
-      onClose();
-    } else if (fullEmail.includes("@hr")) {
-      // Navigate to HR page if needed
-      navigate("/hr");
-      onClose();
-    } else {
-      // Default navigation or show error
-      alert("Please select a valid department");
-    }
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
@@ -70,14 +36,14 @@ export default function LoginPopup({ onClose }) {
           Log in to your Autocorp account.
         </p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => e.preventDefault()}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-400 mb-1">
               Department
             </label>
             <select
               value={department}
-              onChange={handleDepartmentChange}
+              onChange={(e) => setDepartment(e.target.value)}
               className="w-full p-3 rounded-md bg-[#2d3748] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {dropdownOptions.map((option, index) => (
@@ -99,7 +65,6 @@ export default function LoginPopup({ onClose }) {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               className="w-full p-3 rounded-md bg-[#2d3748] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             />
           </div>
 
@@ -113,7 +78,6 @@ export default function LoginPopup({ onClose }) {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               className="w-full p-3 rounded-md bg-[#2d3748] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             />
           </div>
 
@@ -124,8 +88,8 @@ export default function LoginPopup({ onClose }) {
           </div>
 
           <button
-            type="submit"
-            className="w-full p-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold"
+            type="button"
+            className="w-full p-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold cursor-default"
           >
             Log In
           </button>

@@ -1,18 +1,12 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import SalesPage from './Pages/salesPage';
-import LandingPage from './Pages/LandingPage';
- 
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/sales" element={<SalesPage />} />
-        {/* <Route path="/admin" element={<AdminPage />} />
-        <Route path="/hr" element={<HRPage />} /> */}
-      </Routes>
-    </BrowserRouter>
-  );
-}
+import React from "react";
+import LandingPage from "./Pages/LandingPage"; // ✅ make sure this path is correct
 
-export default App; 
+const App = () => {
+  return (
+    <>
+      <LandingPage />
+    </>
+  );
+};
+
+export default App;
