@@ -10,17 +10,15 @@ const IMAGE_URLS = {
 };
 
 // ⭐ Star Rating Component
-const StarRating = ({ rating }) => {
-  return (
-    <div className="flex text-lg mt-2">
-      {[...Array(5)].map((_, i) => (
-        <span key={i} className={i < rating ? "text-yellow-400" : "text-gray-400"}>
-          ★
-        </span>
-      ))}
-    </div>
-  );
-};
+const StarRating = ({ rating }) => (
+  <div className="flex text-lg mt-2">
+    {[...Array(5)].map((_, i) => (
+      <span key={i} className={i < rating ? "text-yellow-400" : "text-gray-400"}>
+        ★
+      </span>
+    ))}
+  </div>
+);
 
 // 🧱 Section Header
 const SectionHeader = ({ title }) => (
@@ -33,15 +31,14 @@ const SectionHeader = ({ title }) => (
 const Card = ({ image, title, description, rating }) => (
   <div className="flex flex-col bg-gray-900 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02] cursor-pointer">
     <img src={image} alt={title} className="w-full h-48 sm:h-56 md:h-64 object-cover" />
-    <div className="p-4 flex flex-col flex-grow">
+    <div className="p-4 flex flex-col grow">
       <h3 className="text-lg font-semibold mb-1">{title}</h3>
-      {description && <p className="text-gray-400 text-sm flex-grow">{description}</p>}
+      {description && <p className="text-gray-400 text-sm grow">{description}</p>}
       {rating && <StarRating rating={rating} />}
     </div>
   </div>
 );
 
-// 💌 Newsletter Component
 const NewsLetter = ({ onClose }) => {
   const latestNews = [
     {
@@ -56,7 +53,7 @@ const NewsLetter = ({ onClose }) => {
       img: IMAGE_URLS.news2,
       title: "Tech Breakthrough: The Engine of Tomorrow",
       description:
-        "The MG Cyberster is an all-electric two-door roadster featuring scissor doors, futuristic interior, and 0–100 km/h in 3.2s.",
+        "The MG Cyberster is an all-electric two-door roadster featuring scissor doors, futuristic interior, and 0-100 km/h in 3.2s.",
     },
     {
       id: 3,
@@ -75,17 +72,16 @@ const NewsLetter = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-gray-950 bg-opacity-90 flex justify-center items-start pt-10 px-2 sm:px-4 overflow-y-auto">
       <div className="relative w-full max-w-6xl bg-gray-900 rounded-lg shadow-2xl my-10 animate-fade-in-up text-white">
-        {/* ❌ Close Button */}
-        <button
+
+         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors text-3xl"
+          className="fixed top-3 right-3 sm:top-5 sm:right-5 z-60 text-gray-400 hover:text-white transition-colors text-4xl sm:text-3xl bg-gray-800/60 rounded-full p-2 sm:p-1 backdrop-blur-sm"
           aria-label="Close"
         >
           &times;
         </button>
 
-        {/* 🏎️ Hero Section */}
-        <header className="relative w-full h-64 sm:h-80 md:h-96 rounded-t-lg overflow-hidden">
+         <header className="relative w-full h-64 sm:h-80 md:h-96 rounded-t-lg overflow-hidden">
           <img
             src={IMAGE_URLS.hero}
             alt="Hero background"

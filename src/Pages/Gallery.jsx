@@ -53,7 +53,7 @@ const VehicleCard = ({ vehicle }) => {
         onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/171717/ffffff?text=Image+Unavailable"; }}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4 sm:p-6">
+      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4 sm:p-6">
         <h3 className="text-lg sm:text-xl font-bold text-white tracking-wide">{name}</h3>
       </div>
     </div>
@@ -93,7 +93,7 @@ export default function Gallery({ onClose }) {
   }, [searchQuery, selectedModel, selectedYear, selectedType]);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm overflow-y-auto">
+    <div className="fixed inset-0 z-100 bg-black/80 backdrop-blur-sm overflow-y-auto">
       <div className="min-h-screen bg-gray-900 font-sans text-gray-100 flex flex-col">
         
         {/* Header */}
@@ -120,8 +120,7 @@ export default function Gallery({ onClose }) {
           </div>
         </header>
 
-        {/* Main Content */}
-        <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+         <main className="grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
           <h1 className="text-3xl sm:text-4xl font-extrabold mb-8 text-center sm:text-left">
             Our Vehicle <span className="text-blue-500">Lineup</span>
           </h1>

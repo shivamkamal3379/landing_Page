@@ -56,7 +56,7 @@ const JOURNEY_STEPS = [
 const TimelineStep = ({ year, title, description, isLast }) => (
   <div className="flex relative">
     <div className="flex flex-col items-center mr-6 md:mr-10">
-      <div className="w-4 h-4 rounded-full bg-blue-500 border-4 border-gray-900 z-10 shadow-md flex-shrink-0" />
+      <div className="w-4 h-4 rounded-full bg-blue-500 border-4 border-gray-900 z-10 shadow-md shrink-0" />
       {!isLast && <div className="h-full w-0.5 bg-gray-700 absolute top-4" />}
     </div>
     <div className="pb-8">
@@ -87,7 +87,7 @@ const RecognitionItem = ({ icon: Icon, title, year }) => (
 
 export default function AboutUs({ onClose }) {
   return (
-    <div className="fixed inset-0 z-[100] bg-black/90 flex justify-center overflow-y-auto">
+    <div className="fixed inset-0 z-100 bg-black/90 flex justify-center overflow-y-auto">
       <div className="bg-gray-900 font-sans text-white w-full max-w-7xl mx-auto my-0 sm:my-8 relative min-h-screen sm:rounded-xl shadow-2xl">
         {/* Close Button */}
         <button

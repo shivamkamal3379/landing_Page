@@ -1,167 +1,134 @@
-import React, { useState } from "react";
-import LoginPopup from "../Pages/LoginPopup";
-import Gallery from "../Pages/Gallery";
-import NewsLetter from "../Pages/NewsLetter";
-import AboutUs from "../Pages/AboutUs";
-import Footer from "../Pages/Footer";
+import React from "react";
 
-const cars = [
-  {
-    name: "MG Astor",
-    desc: "Experience the thrill of driving.",
-    img: "https://images.91wheels.com/assets/b_images/main/models/profile/profile1747391995.jpg?w=840&q=50",
-  },
-  {
-    name: "MG Comet EV",
-    desc: "Drive the future with electric.",
-    img: "https://stimg.cardekho.com/images/carexteriorimages/630x420/MG/Comet-EV/11556/1755844102300/front-left-side-47.jpg?imwidth=420&impolicy=resize",
-  },
-  {
-    name: "MG Hector",
-    desc: "Indulge in luxury and performance.",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTX-xySsDYGrOLL57VXa0aDtjd0Aq1sBamng&",
-  },
-  {
-    name: "MG Windsor",
-    desc: "Unleash the ultimate driving machine.",
-    img: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT0MlQQNtfM8i3Q7nVMbNcK0VeSfe9vIeGlQbEg9GS4jzMD1qiKc_TMps_zeqfAvC8m26n7wZBXTcltmbNxwyRWSvglDSdrWXnntK30F9mdkw",
-  },
-  {
-    name: "MG Hector Plus",
-    desc: "The Beast Of Electric era.",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThub6C8TiaTwUoOLatM7qQwQKvb0IsyJjlGg&s",
-  },
-  {
-    name: "MG Cyberster",
-    desc: "Luxury meets innovation.",
-    img: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTDR6kdjE9q9q-Wg7o8lnzRcpRw7EYWslJ1SKZBr7laqOFjFYhQiN-n97Qx6KdHvrslT4OzKDb-wleFblRIUBLaTq35yrGZo2LcEeCIcjQWHg",
-  },
-];
+const IMAGE_URLS = {
+  hero: "https://c.ndtvimg.com/2019-05/t1tccppg_mg-hector_625x300_15_May_19.jpg",
+  news1: "https://mgmotor.scene7.com/is/image/mgmotor/zs-img-dsc-0319?$mg-rgb-tablet-image-responsive$&fmt=png-alpha",
+  news2: "https://stimg.cardekho.com/images/carexteriorimages/630x420/MG/Cyberster/12221/1758802623039/front-left-side-47.jpg?tr=w-664",
+  news3: "https://www.just-auto.com/wp-content/uploads/sites/30/2025/02/Xd2EQ-global-light-vehicle-market-1024x913.png",
+  review1: "https://stimg.cardekho.com/images/carexteriorimages/630x420/MG/Windsor-EV/11848/1755845275936/front-left-side-47.jpg?impolicy=resize&imwidth=480",
+  review2: "https://www.carblogindia.com/wp-content/uploads/2020/01/MG-Sedan-2020.jpeg",
+};
 
-export default function LandingPage() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showGallery, setShowGallery] = useState(false);
-  const [showNewsLetter, setShowNewsLetter] = useState(false);
-  const [showAboutUs, setShowAboutUs] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const StarRating = ({ rating }) => (
+  <div className="flex text-lg mt-2">
+    {[...Array(5)].map((_, i) => (
+      <span key={i} className={i < rating ? "text-yellow-400" : "text-gray-400"}>
+        ★
+      </span>
+    ))}
+  </div>
+);
+
+const SectionHeader = ({ title }) => (
+  <h2 className="text-2xl md:text-3xl font-semibold mt-10 mb-5 text-center md:text-left">
+    {title}
+  </h2>
+);
+
+const Card = ({ image, title, description, rating }) => (
+  <div className="flex flex-col bg-gray-900 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02] cursor-pointer">
+    <img src={image} alt={title} className="w-full h-48 sm:h-56 md:h-64 object-cover" />
+    <div className="p-4 flex flex-col grow">
+      <h3 className="text-lg font-semibold mb-1">{title}</h3>
+      {description && <p className="text-gray-400 text-sm grow">{description}</p>}
+      {rating && <StarRating rating={rating} />}
+    </div>
+  </div>
+);
+
+const NewsLetter = ({ onClose }) => {
+  const latestNews = [
+    {
+      id: 1,
+      img: IMAGE_URLS.news1,
+      title: "New Model Announcement: The Future Is Here",
+      description:
+        "The MG ZS EV is a compact, fully electric SUV with up to 461 km range, fast charging, and a modern infotainment system.",
+    },
+    {
+      id: 2,
+      img: IMAGE_URLS.news2,
+      title: "Tech Breakthrough: The Engine of Tomorrow",
+      description:
+        "The MG Cyberster is an all-electric two-door roadster featuring scissor doors, futuristic interior, and 0–100 km/h in 3.2s.",
+    },
+    {
+      id: 3,
+      img: IMAGE_URLS.news3,
+      title: "Corporate News: Expanding Our Global Reach",
+      description:
+        "MG Motor expands globally through electric innovation and a strong dealer network in India and Europe.",
+    },
+  ];
+
+  const expertReviews = [
+    { id: 4, img: IMAGE_URLS.review1, title: "MG Hector - Reviewed by Car and Driver", rating: 4 },
+    { id: 5, img: IMAGE_URLS.review2, title: "MG Sedan - Reviewed by Top Gear", rating: 3.5 },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white font-sans overflow-x-hidden">
-       <nav className="sticky top-0 z-50 flex justify-between items-center px-6 md:px-10 py-4 bg-[#0b1320] bg-opacity-90 backdrop-blur-sm">
-        <div className="text-xl font-bold flex items-center gap-2">
-          <div className="bg-blue-600 w-3 h-3 rotate-45"></div>
-          AutoCorp
-        </div>
+    <div className="fixed inset-0 z-9999 bg-gray-950 bg-opacity-90 flex justify-center items-start pt-10 px-2 sm:px-4 overflow-y-auto">
+       <button
+        onClick={onClose}
+        className="fixed top-4 right-4 z-10000 text-white text-4xl sm:text-3xl bg-gray-800/70 hover:bg-gray-700 rounded-full p-2 transition-all"
+        aria-label="Close"
+      >
+        &times;
+      </button>
 
-         <div className="hidden md:flex space-x-6 text-sm">
-          <button onClick={() => setShowLogin(true)} className="hover:text-blue-400">
-            Login
-          </button>
-          <button onClick={() => setShowGallery(true)} className="hover:text-blue-400">
-            Gallery
-          </button>
-          <button onClick={() => setShowNewsLetter(true)} className="hover:text-blue-400">
-            News Letter
-          </button>
-          <button onClick={() => setShowAboutUs(true)} className="hover:text-blue-400">
-            About Us
-          </button>
-        </div>
+      <div className="relative w-full max-w-6xl bg-gray-900 rounded-lg shadow-2xl my-10 animate-fade-in-up text-white">
+        {/* 🏎️ Hero Section */}
+        <header className="relative w-full h-64 sm:h-80 md:h-96 rounded-t-lg overflow-hidden">
+          <img
+            src={IMAGE_URLS.hero}
+            alt="Hero background"
+            className="absolute inset-0 w-full h-full object-cover opacity-50"
+          />
+          <div className="relative z-10 flex flex-col items-center justify-center h-full text-center p-4 backdrop-blur-sm">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
+              Stay in the Fast Lane
+            </h1>
+            <p className="text-gray-300 max-w-2xl mb-6 text-sm sm:text-base">
+              Get the latest news, exclusive offers, and behind-the-scenes stories from MG Motors.
+            </p>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded hover:bg-gray-800"
-        >
-          {mobileMenuOpen ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.75h16.5M3.75 12h16.5m-16.5 6.25h16.5" />
-            </svg>
-          )}
-        </button>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="absolute top-16 left-0 w-full bg-[#0b1320] flex flex-col items-center space-y-4 py-4 shadow-lg md:hidden">
-            <button onClick={() => setShowLogin(true)} className="hover:text-blue-400">
-              Login
-            </button>
-            <button onClick={() => setShowGallery(true)} className="hover:text-blue-400">
-              Gallery
-            </button>
-            <button onClick={() => setShowNewsLetter(true)} className="hover:text-blue-400">
-              News Letter
-            </button>
-            <button onClick={() => setShowAboutUs(true)} className="hover:text-blue-400">
-              About Us
-            </button>
+            <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+              <input
+                type="email"
+                placeholder="your-email@example.com"
+                className="flex-1 p-3 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white text-sm sm:text-base"
+              />
+              <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition-colors text-sm sm:text-base">
+                Subscribe
+              </button>
+            </div>
           </div>
-        )}
-      </nav>
+        </header>
 
-       <section className="relative flex flex-col items-center justify-center text-center px-6 min-h-[70vh] sm:min-h-[80vh] md:min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 overflow-hidden">
-        <img
-          src="https://mgmotor.scene7.com/is/image/mgmotor/windsor-bn-dsc-011?hei=1920&qlt=90&resMode=bisharp"
-          alt="Car background"
-          className="absolute inset-0 w-full h-full object-cover opacity-30"
-        />
-        <div className="relative z-10 max-w-2xl sm:max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Experience the Future of Driving
-          </h1>
-          <p className="text-gray-300 text-sm sm:text-base md:text-lg mb-8">
-            Explore our range of innovative and high-performance vehicles designed for the modern driver.
-          </p>
-        </div>
-      </section>
+         <main className="p-4 sm:p-6 md:p-10">
+           <section className="mb-12">
+            <SectionHeader title="Latest from the Track" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {latestNews.map((item) => (
+                <Card key={item.id} image={item.img} title={item.title} description={item.description} />
+              ))}
+            </div>
+          </section>
 
-       <section className="bg-[#0f172a] py-12 overflow-hidden">
-        <div className="relative w-full">
-          <div className="flex gap-6 animate-scroll hover:[animation-play-state:paused]">
-            {[...cars, ...cars].map((car, index) => (
-              <div
-                key={index}
-                className="bg-gray-800 rounded-xl min-w-[220px] sm:min-w-[250px] md:min-w-[280px] flex-shrink-0 hover:-translate-y-1 transition-transform duration-300"
-              >
-                <img
-                  src={car.img}
-                  alt={car.name}
-                  className="w-full h-36 sm:h-40 md:h-48 object-cover rounded-t-xl"
-                />
-                <div className="p-3 sm:p-4">
-                  <h3 className="font-semibold text-base sm:text-lg">{car.name}</h3>
-                  <p className="text-gray-400 text-xs sm:text-sm">{car.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+          <hr className="border-gray-700 my-8" />
 
-       {/* <Footer /> */}
-
-       {showLogin && <LoginPopup onClose={() => setShowLogin(false)} />}
-      {showGallery && <Gallery onClose={() => setShowGallery(false)} />}
-      {showNewsLetter && <NewsLetter onClose={() => setShowNewsLetter(false)} />}
-      {showAboutUs && <AboutUs onClose={() => setShowAboutUs(false)} />}
+           <section>
+            <SectionHeader title="Expert Reviews" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {expertReviews.map((item) => (
+                <Card key={item.id} image={item.img} title={item.title} rating={item.rating} />
+              ))}
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   );
-}
+};
+
+export default NewsLetter;
