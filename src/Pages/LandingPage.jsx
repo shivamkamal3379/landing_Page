@@ -140,7 +140,7 @@ export default function LandingPage() {
       {showNewsLetter && <NewsLetter onClose={() => setShowNewsLetter(false)} />}
       {showAboutUs && <AboutUs onClose={() => setShowAboutUs(false)} />}
 
-      <Footer />
+      
     </div>
   );
 }
