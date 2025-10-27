@@ -167,4 +167,4 @@ export default function AboutUs({ onClose }) {
     </div>
   );
 }
-responsive 
+ 
