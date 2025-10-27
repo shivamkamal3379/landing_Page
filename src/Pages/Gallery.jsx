@@ -58,7 +58,7 @@ const VehicleCard = ({ vehicle }) => {
         />
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
         <h3 className="text-xl font-bold text-white tracking-wide">
           {name}
         </h3>
@@ -107,7 +107,7 @@ const CustomSelect = ({ label, options, value, onChange }) => (
 
 
   return (
-     <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm overflow-y-auto">
+     <div className="fixed inset-0 z-100 bg-black/80 backdrop-blur-sm overflow-y-auto">
       
        <div className="min-h-screen bg-gray-900 font-sans text-gray-100 flex flex-col">
         
@@ -144,7 +144,7 @@ const CustomSelect = ({ label, options, value, onChange }) => (
           </div>
         </header>
 
-        <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <main className="grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* ... (rest of the main content and filtering logic) ... */}
           <h1 className="text-4xl font-extrabold mb-8 md:mb-12 tracking-tight">
             Our Vehicle <span className="text-blue-500">Lineup</span>
