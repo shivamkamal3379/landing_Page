@@ -143,7 +143,7 @@ export default function LandingPage() {
      
       {showLogin && <LoginPopup onClose={handleCloseLogin} />}
       {showGallery && <Gallery onClose={handleCloseGallery} />}
-      {showNewsLetter && <NewsLetter onClose={handleCloseNewsLetter} />}
+      {showNewsLetter && <NewsLetter   onClose={handleCloseNewsLetter} />}
       {showAboutUs && <AboutUs onClose={handleCloseAboutUs} />} 
     </div>
   );
