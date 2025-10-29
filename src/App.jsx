@@ -3,7 +3,6 @@ import LandingPage from "./Pages/LandingPage";
 import SalesPage from "./Pages/SalesPage";
 import HrPage from "./Pages/HrPage";
 import AdminPage from "./Pages/AdminPage";
-
 function App() {
   return (
     <Router>
