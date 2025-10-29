@@ -456,7 +456,7 @@ const DynamicSidebar = ({ isDarkMode, setActiveMenu, showSidebar, type }) => {
 };
 
 // --- Main Component ---
-export default function SalesPage() {
+export default function AdminPage() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [activeMenu, setActiveMenu] = useState("Dashboard");
   const [showUserDropdown, setShowUserDropdown] = useState(false);
