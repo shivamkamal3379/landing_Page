@@ -434,7 +434,7 @@ const DynamicSidebar = ({ isDarkMode, setActiveMenu, showSidebar, type }) => {
           className={`fixed inset-y-0 left-0 z-40 w-64 p-4 shadow-xl ${sidebarBg} lg:static lg:h-auto lg:w-64`}
         >
           <h3 className="text-xl font-semibold mb-6 font-medium text-indigo-400">
-            {config.title}
+            {config.title} 
           </h3>
           <div className="space-y-2">
             {config.items.map((item) => (

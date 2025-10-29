@@ -564,7 +564,7 @@ export default function SalesPage() {
       </nav>
 
       {/* Main Content Area with Sidebar */}
-      <div className="flex flex-grow overflow-hidden">
+      <div className="flex flex-grow overflow-hidden"> 
         {/* Sidebar Component */}
         {(activeMenu.includes("RPT") || activeMenu.includes("Bounced") || activeMenu.includes("Bank Tally") || activeMenu.includes("Recent Transactions")) && (
             <PaymentSidebar 
