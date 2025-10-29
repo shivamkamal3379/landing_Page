@@ -30,18 +30,15 @@ export default function LoginPopup({ onClose }) {
     };
   }, [onClose]);
 
-  // ✅ Handles login + navigation
-  const handleLogin = () => {
+   const handleLogin = () => {
     if (!username || !password) {
       alert("Please fill in all fields!");
       return;
     }
 
-    // Close popup first
-    onClose();
+     onClose();
 
-    // Navigate based on department
-    if (department === "@sales") {
+     if (department === "@sales") {
       navigate("/sales");
     } else if (department === "@admin") {
       navigate("/admin");
