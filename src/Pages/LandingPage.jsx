@@ -3,7 +3,6 @@ import LoginPopup from  '../Pages/LoginPopup';
 import Gallery from '../Pages/Gallery';
 import NewsLetter from '../Pages/NewsLetter'
 import AboutUs from '../Pages/AboutUs'
-import Footer from '../Pages/Footer'
 
 const cars = [
   {
