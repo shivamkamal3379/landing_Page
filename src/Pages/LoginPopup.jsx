@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoginPopup({ onClose }) {
   const [username, setUsername] = useState("");
-  const [department, setDepartment] = useState("@sales"); // kept for UI only
+  const [department, setDepartment] = useState("@SalesPro"); 
   const [password, setPassword] = useState("");
-  const dropdownOptions = ["@hr", "@admin", "@sales"];
+  const dropdownOptions = ["@HrPro",  "@SalesPro"];
   const usernameRef = useRef(null);
   const navigate = useNavigate();
 
@@ -38,8 +38,7 @@ export default function LoginPopup({ onClose }) {
 
     const trimmedUsername = username.trim().toLowerCase();
 
-    // ✅ Routing based only on username
-    if (trimmedUsername === "admin") {
+     if (trimmedUsername === "admin") {
       navigate("/admin");
     } else {
       navigate("/sales");
