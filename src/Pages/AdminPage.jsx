@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+
 
 import {
   LineChart,
@@ -457,6 +459,8 @@ const DynamicSidebar = ({ isDarkMode, setActiveMenu, showSidebar, type }) => {
 
 // --- Main Component ---
 export default function AdminPage() {
+  const navigate = useNavigate();
+
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [activeMenu, setActiveMenu] = useState("Dashboard");
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -728,182 +732,174 @@ export default function AdminPage() {
 
   return (
     <div className={`min-h-screen flex flex-col ${appBg}`}>
-      {/* Navbar */}
-      <nav
-        className={`flex justify-between items-center px-6 py-4 shadow-md ${navbarBg}`}
+   {/* Navbar */}
+<nav
+  className={`flex justify-between items-center px-6 py-4 shadow-md ${navbarBg}`}
+>
+  {/* Logo and Sidebar Toggle */}
+  <div className="flex items-center">
+    {(isSidebarActive || showSidebar) && (
+      <motion.button
+        onClick={() => setShowSidebar(!showSidebar)}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className={`p-2 mr-4 rounded-full ${
+          isDarkMode
+            ? "text-white hover:bg-gray-700"
+            : "text-gray-700 hover:bg-gray-100"
+        }`}
       >
-        {/* Logo and Sidebar Toggle */}
-        <div className="flex items-center">
-          {/* Show Menu button only when a sidebar is relevant */}
-          {(isSidebarActive || showSidebar) && (
-            <motion.button
-              onClick={() => setShowSidebar(!showSidebar)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`p-2 mr-4 rounded-full ${
-                isDarkMode
-                  ? "text-white hover:bg-gray-700"
-                  : "text-gray-700 hover:bg-gray-100"
+        <Menu size={24} />
+      </motion.button>
+    )}
+    <span
+      className={`text-2xl font-black ${
+        isDarkMode ? "text-indigo-400" : "text-indigo-700"
+      }`}
+    >
+      Sales Pro
+    </span>
+  </div>
+
+  {/* Navigation */}
+  <div className="flex space-x-4 items-center relative">
+    {/* Dashboard */}
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() => handleNavigation("Dashboard")}
+      className={`px-4 py-2 rounded-lg ${
+        activeMenu === "Dashboard"
+          ? "bg-indigo-600 text-white"
+          : isDarkMode
+          ? "text-gray-300 hover:bg-gray-700"
+          : "text-gray-700 hover:bg-gray-100"
+      }`}
+    >
+      Dashboard
+    </motion.button>
+
+    {/* Payment Management */}
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() => handleSidebarToggle("payment", "payment__Cash")}
+      className={`px-4 py-2 rounded-lg ${
+        sidebarType === "payment"
+          ? "bg-indigo-600 text-white"
+          : isDarkMode
+          ? "text-gray-300 hover:bg-gray-700"
+          : "text-gray-700 hover:bg-gray-100"
+      }`}
+    >
+      Payment Management
+    </motion.button>
+
+    {/* Cash */}
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() => handleSidebarToggle("cash", "cash__Company Group")}
+      className={`px-4 py-2 rounded-lg ${
+        sidebarType === "cash"
+          ? "bg-indigo-600 text-white"
+          : isDarkMode
+          ? "text-gray-300 hover:bg-gray-700"
+          : "text-gray-700 hover:bg-gray-100"
+      }`}
+    >
+      Cash
+    </motion.button>
+  </div>
+
+  <div className="flex items-center gap-3 relative">
+    {/* Settings Icon (Moved to Right) */}
+    <motion.button
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() =>
+        handleSidebarToggle("settings", "settings__Global Settings")
+      }
+      className={`p-2 rounded-full ${
+        isDarkMode
+          ? "text-gray-300 hover:bg-gray-700"
+          : "text-gray-700 hover:bg-gray-100"
+      }`}
+    >
+      <Settings size={22} />
+    </motion.button>
+
+    {/* User Card */}
+    <button
+      onClick={() => setShowUserDropdown(!showUserDropdown)}
+      className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
+        isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
+      }`}
+    >
+      <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-semibold">
+        A
+      </div>
+      <span className="font-medium text-sm">Karan Luthra</span>
+      <ChevronDown className="w-4 h-4" />
+    </button>
+
+    {/* Dropdown */}
+    <AnimatePresence>
+      {showUserDropdown && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+          className={`absolute right-0 top-12 w-64 rounded-xl shadow-lg p-4 z-50 ${
+            isDarkMode
+              ? "bg-gray-800 border border-gray-700"
+              : "bg-white border border-gray-200"
+          }`}
+        >
+          <div className="mb-3">
+            <h4 className="font-semibold text-lg">Administrator</h4>
+            <p className="text-sm text-gray-400">CEO</p>
+            <p className="text-xs text-gray-500 mt-1">Member since 1990</p>
+          </div>
+          <div className="border-t border-gray-600 mt-2 pt-2 flex flex-col space-y-2">
+            <button
+              className={`text-left w-full px-3 py-2 rounded-md ${
+                isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
               }`}
             >
-              <Menu size={24} />
-            </motion.button>
-          )}
-          <span
-            className={`text-2xl font-black ${
-              isDarkMode ? "text-indigo-400" : "text-indigo-700"
-            }`}
-          >
-            Sales Pro
-          </span>
-        </div>
+              Profile
+            </button>
+            <button
+              onClick={() => navigate("/")}
+              className={`text-left w-full px-3 py-2 rounded-md ${
+                isDarkMode
+                  ? "hover:bg-gray-700 text-red-400"
+                  : "hover:bg-gray-100 text-red-600"
+              }`}
+            >
+              Logout
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
 
-        {/* Navigation */}
-        <div className="flex space-x-4 items-center relative">
-          {/* Dashboard */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleNavigation("Dashboard")}
-            className={`px-4 py-2 rounded-lg ${
-              activeMenu === "Dashboard"
-                ? "bg-indigo-600 text-white"
-                : isDarkMode
-                ? "text-gray-300 hover:bg-gray-700"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
-          >
-            Dashboard
-          </motion.button>
+    {/* Dark Mode Toggle */}
+    <motion.button
+      onClick={toggleDarkMode}
+      whileHover={{ scale: 1.1 }}
+      className={`p-2 rounded-full ${
+        isDarkMode
+          ? "text-yellow-400 hover:bg-gray-700"
+          : "text-indigo-600 hover:bg-gray-100"
+      }`}
+    >
+      {isDarkMode ? <Moon size={20} /> : <Sun size={20} />}
+    </motion.button>
+  </div>
+</nav>
 
-          {/* Payment Management */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleSidebarToggle("payment", "payment__Cash")}
-            className={`px-4 py-2 rounded-lg ${
-              sidebarType === "payment"
-                ? "bg-indigo-600 text-white"
-                : isDarkMode
-                ? "text-gray-300 hover:bg-gray-700"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
-          >
-            Payment Management
-          </motion.button>
-
-          {/* Cash (New top-level section) */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleSidebarToggle("cash", "cash__Company Group")}
-            className={`px-4 py-2 rounded-lg ${
-              sidebarType === "cash"
-                ? "bg-indigo-600 text-white"
-                : isDarkMode
-                ? "text-gray-300 hover:bg-gray-700"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
-          >
-            Cash
-          </motion.button>
-
-          {/* Settings (Renamed from Administrator) */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() =>
-              handleSidebarToggle("settings", "settings__Global Settings")
-            }
-            className={`px-4 py-2 rounded-lg ${
-              sidebarType === "settings"
-                ? "bg-indigo-600 text-white"
-                : isDarkMode
-                ? "text-gray-300 hover:bg-gray-700"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
-          >
-            Settings
-          </motion.button>
-        </div>
-
-        {/* Right Controls */}
-        <div className="flex items-center gap-3 relative">
-          {/* User Card - UPDATED */}
-          <button
-            onClick={() => setShowUserDropdown(!showUserDropdown)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-              isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-            }`}
-          >
-            <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-semibold">
-              A {/* Changed initial from R to A */}
-            </div>
-            <span className="font-medium text-sm">Administ</span>{" "}
-            {/* Changed Name */}
-            <ChevronDown className="w-4 h-4" />
-          </button>
-
-          {/* Dropdown - UPDATED */}
-          <AnimatePresence>
-            {showUserDropdown && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className={`absolute right-0 top-12 w-64 rounded-xl shadow-lg p-4 z-50 ${
-                  isDarkMode
-                    ? "bg-gray-800 border border-gray-700"
-                    : "bg-white border border-gray-200"
-                }`}
-              >
-                <div className="mb-3">
-                  <h4 className="font-semibold text-lg">Administ</h4>{" "}
-                  {/* Changed Name */}
-                  <p className="text-sm text-gray-400">CEO</p>{" "}
-                  {/* Changed Title */}
-                  <p className="text-xs text-gray-500 mt-1">
-                    Member since 1990
-                  </p>{" "}
-                  {/* Changed Date */}
-                </div>
-                <div className="border-t border-gray-600 mt-2 pt-2 flex flex-col space-y-2">
-                  <button
-                    className={`text-left w-full px-3 py-2 rounded-md ${
-                      isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    Profile
-                  </button>
-                  <button
-  onClick={() => navigate("/")}  
-  className={`text-left w-full px-3 py-2 rounded-md ${
-    isDarkMode
-      ? "hover:bg-gray-700 text-red-400"
-      : "hover:bg-gray-100 text-red-600"
-  }`}
->
-  Logout
-</button>
-
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <motion.button
-            onClick={toggleDarkMode}
-            whileHover={{ scale: 1.1 }}
-            className={`p-2 rounded-full ${
-              isDarkMode
-                ? "text-yellow-400 hover:bg-gray-700"
-                : "text-indigo-600 hover:bg-gray-100"
-            }`}
-          >
-            {isDarkMode ? <Moon size={20} /> : <Sun size={20} />}
-          </motion.button>
-        </div>
-      </nav>
 
       <div className="flex flex-grow overflow-hidden">
         {sidebarType && (

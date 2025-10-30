@@ -102,7 +102,7 @@ export default function LandingPage() {
         <img
           src="https://mgmotor.scene7.com/is/image/mgmotor/windsor-bn-dsc-011?hei=1920&qlt=90&resMode=bisharp"
           alt="Car background"
-          className="absolute inset-0 w-full h-full object-cover opacity-30"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
         <div className="relative z-10 max-w-3xl">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
