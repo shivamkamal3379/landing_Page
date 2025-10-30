@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function LoginPopup({ onClose }) {
   const [username, setUsername] = useState("");
@@ -40,7 +40,11 @@ export default function LoginPopup({ onClose }) {
 
      if (trimmedUsername === "admin") {
       navigate("/admin");
-    } else {
+    } 
+     else if(trimmedUsername === "Ravi Verma"){
+Navigate("/sales")
+     }
+    else {
       navigate("/sales");
     }
 
