@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoginPopup({ onClose }) {
   const [username, setUsername] = useState("");
-  const [department, setDepartment] = useState("@sales");
+  const [department, setDepartment] = useState("@sales"); // kept for UI only
   const [password, setPassword] = useState("");
   const dropdownOptions = ["@hr", "@admin", "@sales"];
   const usernameRef = useRef(null);
@@ -30,21 +30,22 @@ export default function LoginPopup({ onClose }) {
     };
   }, [onClose]);
 
-   const handleLogin = () => {
+  const handleLogin = () => {
     if (!username || !password) {
       alert("Please fill in all fields!");
       return;
     }
 
-     onClose();
+    const trimmedUsername = username.trim().toLowerCase();
 
-     if (department === "@sales") {
-      navigate("/sales");
-    } else if (department === "@admin") {
+    // ✅ Routing based only on username
+    if (trimmedUsername === "admin") {
       navigate("/admin");
-    } else if (department === "@hr") {
-      navigate("/hr");
+    } else {
+      navigate("/sales");
     }
+
+    onClose();
   };
 
   return (
@@ -56,6 +57,7 @@ export default function LoginPopup({ onClose }) {
         </p>
 
         <form onSubmit={(e) => e.preventDefault()}>
+          {/* Department (UI only, not affecting routing) */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-400 mb-1">
               Department
@@ -73,6 +75,7 @@ export default function LoginPopup({ onClose }) {
             </select>
           </div>
 
+          {/* Username */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-400 mb-1">
               Username
@@ -87,6 +90,7 @@ export default function LoginPopup({ onClose }) {
             />
           </div>
 
+          {/* Password */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-400 mb-1">
               Password

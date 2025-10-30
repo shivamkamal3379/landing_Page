@@ -34,8 +34,7 @@ import {
   Settings,
 } from "lucide-react";
 
-// --- Dummy Data ---
-const monthlySalesData = [
+ const monthlySalesData = [
   { month: "Jan", Cash: 20, Cheque: 10 },
   { month: "Feb", Cash: 28, Cheque: 15 },
   { month: "Mar", Cash: 25, Cheque: 12 },
@@ -44,16 +43,14 @@ const monthlySalesData = [
   { month: "Jun", Cash: 40, Cheque: 30 },
 ];
 
-// --- Utility ---
-const StatRow = ({ label, value }) => (
+ const StatRow = ({ label, value }) => (
   <div className="flex justify-between text-sm">
     <span>{label}</span>
     <span className="font-semibold">{value}</span>
   </div>
 );
 
-// --- Dashboard Cards (unchanged for brevity) ---
-const DashboardCards = ({ isDarkMode }) => {
+ const DashboardCards = ({ isDarkMode }) => {
   const cardStyle = `p-5 rounded-xl shadow-md transition-all duration-300 ${
     isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800"
   }`;
@@ -336,8 +333,7 @@ const PaymentTable = ({ isDarkMode }) => {
   );
 };
 
-// --- Admin/Cash Dummy Data Table Component (New reusable component) ---
-const AdminDataTable = ({ isDarkMode, title, columns, data }) => {
+ const AdminDataTable = ({ isDarkMode, title, columns, data }) => {
   const tableStyle = isDarkMode
     ? "bg-gray-800 text-gray-100"
     : "bg-white text-gray-900";
@@ -403,8 +399,7 @@ const DynamicSidebar = ({ isDarkMode, setActiveMenu, showSidebar, type }) => {
     { label: "User", icon: Users },
   ];
 
-  // Settings Sidebar Options (General configuration)
-  const settingsItems = [
+   const settingsItems = [
     { label: "Global Settings", icon: Settings },
     { label: "User Roles", icon: Users },
     { label: "System Logs", icon: ClipboardList },
@@ -412,7 +407,7 @@ const DynamicSidebar = ({ isDarkMode, setActiveMenu, showSidebar, type }) => {
 
   const sidebarConfig = {
     payment: { title: "Payment Sections", items: paymentItems },
-    cash: { title: "Cash Setup / Admin", items: cashItems },
+    cash: { title: " Admin", items: cashItems },
     settings: { title: "Global Settings", items: settingsItems },
   };
 
@@ -808,13 +803,12 @@ export default function AdminPage() {
           : "text-gray-700 hover:bg-gray-100"
       }`}
     >
-      Cash
+      Administrator
     </motion.button>
   </div>
 
   <div className="flex items-center gap-3 relative">
-    {/* Settings Icon (Moved to Right) */}
-    <motion.button
+     <motion.button
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       onClick={() =>
@@ -829,8 +823,7 @@ export default function AdminPage() {
       <Settings size={22} />
     </motion.button>
 
-    {/* User Card */}
-    <button
+     <button
       onClick={() => setShowUserDropdown(!showUserDropdown)}
       className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
         isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
@@ -839,7 +832,7 @@ export default function AdminPage() {
       <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-semibold">
         A
       </div>
-      <span className="font-medium text-sm">Karan Luthra</span>
+      <span className="font-medium text-sm">Adminstrator </span>
       <ChevronDown className="w-4 h-4" />
     </button>
 
