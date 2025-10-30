@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import LoginPopup from  '../Pages/LoginPopup';
-import Gallery from '../Pages/Gallery';
-import NewsLetter from '../Pages/NewsLetter'
-import AboutUs from '../Pages/AboutUs'
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import LoginPopup from "../Pages/LoginPopup";
+import Gallery from "../Pages/Gallery";
+import NewsLetter from "../Pages/NewsLetter";
+import AboutUs from "../Pages/AboutUs";
 
 const cars = [
   {
@@ -43,85 +44,84 @@ export default function LandingPage() {
   const [showNewsLetter, setShowNewsLetter] = useState(false);
   const [showAboutUs, setShowAboutUs] = useState(false);
 
-   const handleLoginClick = () => {
-    setShowLogin(true);
-  };
-
-  const handleCloseLogin = () => {
-    setShowLogin(false);
-  };
-
-  // Gallery o
-  const handleGalleryClick = () => {
-    setShowGallery(true);
-  };
-  const handleCloseGallery = () => {
-    setShowGallery(false);
-  };
-  
-  // Newsletter 
-  const handleNewsLetterClick = () => {
-    setShowNewsLetter(true);
-  };
-  const handleCloseNewsLetter = () => {
-    setShowNewsLetter(false);
-  };
-
-  // About us
-  const handleAboutUsClick = () => {
-    setShowAboutUs(true);
-  };
-  const handleCloseAboutUs = () => {
-    setShowAboutUs(false);
-  };
+  // Lock background scroll when modal is open
+  useEffect(() => {
+    if (showLogin || showGallery || showNewsLetter || showAboutUs) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showLogin, showGallery, showNewsLetter, showAboutUs]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans">
-       <nav className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-[#0b1320] bg-opacity-90 backdrop-blur-sm">
-        <div className="text-xl font-bold flex items-center gap-2">
+      {/* 🟦 NAVBAR */}
+      <motion.nav
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-[#0b1320] bg-opacity-90 backdrop-blur-sm"
+      >
+        <motion.div
+          className="text-xl font-bold flex items-center gap-2"
+          whileHover={{ scale: 1.05 }}
+        >
           <div className="bg-blue-600 w-3 h-3 rotate-45"></div>
           AutoCorp
-        </div>
+        </motion.div>
         <div className="space-x-6 text-sm">
-          <button onClick={handleLoginClick} className="hover:text-blue-400">
+          <motion.button whileHover={{ scale: 1.1 }} onClick={() => setShowLogin(true)}>
             Login
-          </button>
-           <button onClick={handleGalleryClick} className="hover:text-blue-400">
+          </motion.button>
+          <motion.button whileHover={{ scale: 1.1 }} onClick={() => setShowGallery(true)}>
             Gallery
-          </button>
-          <button onClick={handleNewsLetterClick} className="hover:text-blue-400">
+          </motion.button>
+          <motion.button whileHover={{ scale: 1.1 }} onClick={() => setShowNewsLetter(true)}>
             News Letter
-          </button>
-          <button onClick={handleAboutUsClick} className="hover:text-blue-400">
+          </motion.button>
+          <motion.button whileHover={{ scale: 1.1 }} onClick={() => setShowAboutUs(true)}>
             About Us
-          </button> 
+          </motion.button>
         </div>
-      </nav>
+      </motion.nav>
 
-       <section className="relative flex flex-col items-center justify-center text-center px-6 min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 overflow-hidden">
+      {/* 🟨 HERO SECTION */}
+      <section className="relative flex flex-col items-center justify-center text-center px-6 min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 overflow-hidden">
         <img
           src="https://mgmotor.scene7.com/is/image/mgmotor/windsor-bn-dsc-011?hei=1920&qlt=90&resMode=bisharp"
           alt="Car background"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
-        <div className="relative z-10 max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="relative z-10 max-w-3xl"
+        >
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Experience the Future of Driving
           </h1>
           <p className="text-gray-300 mb-8">
-            Explore our range of innovative and high-performance vehicles
-            designed for the modern driver.
+            Explore our range of innovative and high-performance vehicles designed for the modern driver.
           </p>
-          </div>
+        </motion.div>
       </section>
 
-       <section className="bg-[#0f172a] py-12 overflow-hidden">
-        <div className="relative w-full">
+      {/* 🟩 CAR SHOWCASE */}
+      <section className="bg-[#0f172a] py-12 overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1.2 }}
+          viewport={{ once: true }}
+          className="relative w-full"
+        >
           <div className="flex gap-6 animate-scroll hover:[animation-play-state:paused]">
             {[...cars, ...cars].map((car, index) => (
-              <div
+              <motion.div
                 key={index}
                 className="bg-gray-800 rounded-xl min-w-[250px] flex-shrink-0 hover:-translate-y-1 transition-transform duration-300"
+                whileHover={{ scale: 1.05 }}
               >
                 <img
                   src={car.img}
@@ -132,18 +132,51 @@ export default function LandingPage() {
                   <h3 className="font-semibold text-lg">{car.name}</h3>
                   <p className="text-gray-400 text-sm">{car.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
-
+        </motion.div>
       </section>
-      
-     
-      {showLogin && <LoginPopup onClose={handleCloseLogin} />}
-      {showGallery && <Gallery onClose={handleCloseGallery} />}
-      {showNewsLetter && <NewsLetter   onClose={handleCloseNewsLetter} />}
-      {showAboutUs && <AboutUs onClose={handleCloseAboutUs} />} 
+
+      {/* 🟥 POPUPS WITH ANIMATION */}
+      <AnimatePresence>
+        {showLogin && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <LoginPopup onClose={() => setShowLogin(false)} />
+          </motion.div>
+        )}
+        {showGallery && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Gallery onClose={() => setShowGallery(false)} />
+          </motion.div>
+        )}
+        {showNewsLetter && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <NewsLetter onClose={() => setShowNewsLetter(false)} />
+          </motion.div>
+        )}
+        {showAboutUs && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <AboutUs onClose={() => setShowAboutUs(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
