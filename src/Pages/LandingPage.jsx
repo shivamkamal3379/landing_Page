@@ -1,8 +1,13 @@
- import React, { useState } from "react";
-import LoginPopup from  '../Pages/LoginPopup';
-import Gallery from '../Pages/Gallery';
-import NewsLetter from '../Pages/NewsLetter'
-import AboutUs from '../Pages/AboutUs'
+import React, { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import LoginPopup from "../Pages/LoginPopup";
+import Gallery from "../Pages/Gallery";
+import NewsLetter from "../Pages/NewsLetter";
+import AboutUs from "../Pages/AboutUs";
+import videoFile from "../assets/VideoLanding-.mp4";
+import pic1 from "../assets/pic1.png";
+import pic2 from "../assets/pic2.png";
+import pic3 from "../assets/pic3.png";
 
 const cars = [
   {
@@ -42,86 +47,147 @@ export default function LandingPage() {
   const [showGallery, setShowGallery] = useState(false);
   const [showNewsLetter, setShowNewsLetter] = useState(false);
   const [showAboutUs, setShowAboutUs] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const videoRef = useRef(null);
 
-   const handleLoginClick = () => {
-    setShowLogin(true);
-  };
-
-  const handleCloseLogin = () => {
-    setShowLogin(false);
-  };
-
-  // Gallery o
-  const handleGalleryClick = () => {
-    setShowGallery(true);
-  };
-  const handleCloseGallery = () => {
-    setShowGallery(false);
-  };
-  
-  // Newsletter 
-  const handleNewsLetterClick = () => {
-    setShowNewsLetter(true);
-  };
-  const handleCloseNewsLetter = () => {
-    setShowNewsLetter(false);
-  };
-
-  // About us
-  const handleAboutUsClick = () => {
-    setShowAboutUs(true);
-  };
-  const handleCloseAboutUs = () => {
-    setShowAboutUs(false);
+  const enableSound = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.volume = 1;
+      videoRef.current.play();
+      setSoundEnabled(true);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans">
-       <nav className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-[#0b1320] bg-opacity-90 backdrop-blur-sm">
+      {/* 🧭 Navbar */}
+      <nav className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-[#0b1320] bg-opacity-90 backdrop-blur-sm">
         <div className="text-xl font-bold flex items-center gap-2">
           <div className="bg-blue-600 w-3 h-3 rotate-45"></div>
           AutoCorp
         </div>
         <div className="space-x-6 text-sm">
-          <button onClick={handleLoginClick} className="hover:text-blue-400">
+          <button onClick={() => setShowLogin(true)} className="hover:text-blue-400">
             Login
           </button>
-           <button onClick={handleGalleryClick} className="hover:text-blue-400">
+          <button onClick={() => setShowGallery(true)} className="hover:text-blue-400">
             Gallery
           </button>
-          <button onClick={handleNewsLetterClick} className="hover:text-blue-400">
+          <button onClick={() => setShowNewsLetter(true)} className="hover:text-blue-400">
             News Letter
           </button>
-          <button onClick={handleAboutUsClick} className="hover:text-blue-400">
+          <button onClick={() => setShowAboutUs(true)} className="hover:text-blue-400">
             About Us
-          </button> 
+          </button>
         </div>
       </nav>
 
-       <section className="relative flex flex-col items-center justify-center text-center px-6 min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 overflow-hidden">
+      {/* 🌅 Hero Section */}
+      <section className="relative flex flex-col items-center justify-center text-center px-6 min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 overflow-hidden">
         <img
           src="https://mgmotor.scene7.com/is/image/mgmotor/windsor-bn-dsc-011?hei=1920&qlt=90&resMode=bisharp"
           alt="Car background"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
+
         <div className="relative z-10 max-w-3xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <motion.h1
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="text-4xl md:text-5xl font-bold mb-4"
+          >
             Experience the Future of Driving
-          </h1>
-          <p className="text-gray-300 mb-8">
-            Explore our range of innovative and high-performance vehicles
-            designed for the modern driver.
-          </p>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="text-gray-300 mb-8"
+          >
+            Explore our range of innovative and high-performance vehicles designed for the modern driver.
+          </motion.p>
+        </div>
+
+        {/* 🌈 Subtle Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-gray-900 to-transparent"></div>
+
+        {/* ⬇️ Scroll Down Indicator */}
+        <motion.div
+          initial={{ opacity: 0, y: 0 }}
+          animate={{ opacity: 1, y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-gray-300 text-sm cursor-pointer"
+          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: "smooth" })}
+        >
+          <div className="flex flex-col items-center">
+            <span>Scroll Down</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 mt-1"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
           </div>
+        </motion.div>
       </section>
 
-       <section className="bg-[#0f172a] py-12 overflow-hidden">
+      {/* 🎥 Autoplay Video Section */}
+      <section className="relative w-full h-[90vh] overflow-hidden bg-black">
+        <video
+          ref={videoRef}
+          src={videoFile}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/20"></div>
+
+        {!soundEnabled && (
+          <div
+            onClick={enableSound}
+            className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm cursor-pointer transition-opacity duration-700 hover:bg-black/50"
+          >
+            <div className="px-6 py-3 bg-white/10 border border-white/30 text-white text-lg font-medium rounded-full hover:scale-105 transition-transform duration-300">
+              🔊 Tap to Enable Sound
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 🖼️ Three Images Section */}
+      <section className="bg-[#0b1320] py-12 flex flex-col items-center gap-10">
+        {[pic1, pic2, pic3].map((pic, index) => (
+          <motion.img
+            key={index}
+            src={pic}
+            alt={`pic${index + 1}`}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: index * 0.2 }}
+            viewport={{ once: true }}
+            className="w-[90%] md:w-[70%] rounded-2xl shadow-lg hover:scale-[1.02] transition-transform duration-500"
+          />
+        ))}
+      </section>
+
+      {/* 🚗 Cars Section */}
+      <section className="bg-[#0f172a] py-12 overflow-hidden">
         <div className="relative w-full">
           <div className="flex gap-6 animate-scroll hover:[animation-play-state:paused]">
             {[...cars, ...cars].map((car, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="bg-gray-800 rounded-xl min-w-[250px] flex-shrink-0 hover:-translate-y-1 transition-transform duration-300"
+                whileHover={{ scale: 1.05 }}
+                className="bg-gray-800 rounded-xl min-w-[250px] flex-shrink-0 transition-transform duration-300"
               >
                 <img
                   src={car.img}
@@ -132,18 +198,17 @@ export default function LandingPage() {
                   <h3 className="font-semibold text-lg">{car.name}</h3>
                   <p className="text-gray-400 text-sm">{car.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-
       </section>
-      
-     
-      {showLogin && <LoginPopup onClose={handleCloseLogin} />}
-      {showGallery && <Gallery onClose={handleCloseGallery} />}
-      {showNewsLetter && <NewsLetter   onClose={handleCloseNewsLetter} />}
-      {showAboutUs && <AboutUs onClose={handleCloseAboutUs} />} 
+
+      {/* Popups */}
+      {showLogin && <LoginPopup onClose={() => setShowLogin(false)} />}
+      {showGallery && <Gallery onClose={() => setShowGallery(false)} />}
+      {showNewsLetter && <NewsLetter onClose={() => setShowNewsLetter(false)} />}
+      {showAboutUs && <AboutUs onClose={() => setShowAboutUs(false)} />}
     </div>
   );
-} 
+}

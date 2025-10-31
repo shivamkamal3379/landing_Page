@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPopup({ onClose }) {
   const [username, setUsername] = useState("");
-  const [department, setDepartment] = useState("@SalesPro"); 
+  const [department, setDepartment] = useState("@SalesPro");
   const [password, setPassword] = useState("");
-  const dropdownOptions = ["@HrPro",  "@SalesPro"];
+  const [error, setError] = useState(""); // 👈 For showing error messages
+  const dropdownOptions = ["@HrPro", "@SalesPro"];
   const usernameRef = useRef(null);
   const navigate = useNavigate();
 
@@ -32,23 +33,23 @@ export default function LoginPopup({ onClose }) {
 
   const handleLogin = () => {
     if (!username || !password) {
-      alert("Please fill in all fields!");
+      setError("Please fill in all fields!");
       return;
     }
 
     const trimmedUsername = username.trim().toLowerCase();
 
-     if (trimmedUsername === "admin") {
+    if (trimmedUsername === "admin") {
       navigate("/admin");
-    } 
-     else if(trimmedUsername === "Ravi Verma"){
-Navigate("/sales")
-     }
-    else {
+      onClose();
+    } else if (trimmedUsername === "ravi verma") {
       navigate("/sales");
+      onClose();
+    } else {
+      // 👇 show popup message for invalid username
+      setError("Invalid username. Please try again!");
+      return;
     }
-
-    onClose();
   };
 
   return (
@@ -59,8 +60,15 @@ Navigate("/sales")
           Log in to your Autocorp account.
         </p>
 
+        {/* Error popup */}
+        {error && (
+          <div className="mb-4 bg-red-600 text-white text-sm p-3 rounded-md text-center">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={(e) => e.preventDefault()}>
-          {/* Department (UI only, not affecting routing) */}
+          {/* Department */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-400 mb-1">
               Department
@@ -87,7 +95,10 @@ Navigate("/sales")
               ref={usernameRef}
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                setError(""); // clear error when typing again
+              }}
               placeholder="Enter your username"
               className="w-full p-3 rounded-md bg-[#2d3748] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -101,7 +112,10 @@ Navigate("/sales")
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(""); // clear error when typing again
+              }}
               placeholder="Enter your password"
               className="w-full p-3 rounded-md bg-[#2d3748] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
